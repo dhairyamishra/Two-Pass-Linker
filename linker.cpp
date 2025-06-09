@@ -12,7 +12,6 @@ const char* OUTPUT_DIR = "./sample_outputs/";
 char* getNextToken(FILE *file) {
     static char line[256];
     static char *token = NULL;
-
     while (1) {
         if (token == NULL) {
             if (fgets(line, sizeof(line), file) == NULL) {
@@ -31,6 +30,28 @@ char* getNextToken(FILE *file) {
 }
 
 
+
+
+void firstPASS(FILE *file) {
+    int base_address = 0;
+    char *token;
+    int module = 0;
+    while((token = getNextToken(file)) != NULL) {
+        //get the number of commands specified in the line
+        int def_number = atoi(token);
+        if (def_number < 0) {
+            printf("Error: Negative number of definitions\n");
+            return;
+        }
+        for( int i = 0; i < def_number; i++) {
+            char *sym = getNextToken(file);
+            int rel_addr = atoi(getNextToken(file));
+            printf("Module %d defines symbol %s with relative address %d\n",
+                   module, sym, rel_addr);
+        }
+    }
+}
+
 int main() {
     const char* filename = "input-1";
     char filepath[256];
@@ -41,21 +62,10 @@ int main() {
         printf("Error opening file");
         return 1;
     }
-    int linenum = 1;
-    int token_counter = 0;
-    char *token;
-
-    while ((token = getNextToken(file)) != NULL) {
-        printf("Token: %d:%d : %s\n", token_counter, linenum, token);
-        token_counter++;
-
-        // Check if a new line has been read in getNextToken()
-        // We assume linenum should be incremented when a new line is read.
-        // Here’s a typical approach (but not perfect for all cases):
-        if (token_counter == 1) {
-            linenum++;
-        }
-    }
+    // int linenum = 1;
+    // int token_counter = 0;
+    // char *token;
+    firstPASS(file);
 
     fclose(file);
     return 0;
