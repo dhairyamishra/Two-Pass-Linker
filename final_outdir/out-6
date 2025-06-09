@@ -1,15 +1,12 @@
-Use list symbol: X21
-Instruction: E 1000
-Instruction: E 1000
-Instruction: E 1000
-Processed module 0 -- base address 0, size 3
-Defined symbol: X21=3 (Module 1, relative 0)
-Instruction: A 2956
-Processed module 1 -- base address 3, size 1
-Defined symbol: X11=4 (Module 2, relative 0)
-Instruction: R 3056
-Processed module 2 -- base address 4, size 1
-
-Symbol Table
+SymTable:
 X11=4
 X21=3
+
+BinaryCode:
+000: 1003
+001: 1003
+002: 1003
+003: 2000 Error: Absolute address exceeds machine size; zero used
+004: 3004 Error: Relative address exceeds module size; zero used
+
+Summary: Errors=0 Warnings=0

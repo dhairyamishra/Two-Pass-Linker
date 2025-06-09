@@ -1,64 +1,4 @@
-Defined symbol: X11=6 (Module 0, relative 6)
-Defined symbol: X12=8 (Module 0, relative 8)
-Defined symbol: X13=9 (Module 0, relative 9)
-Use list symbol: X22
-Use list symbol: X31
-Instruction: R 1000
-Instruction: E 1001
-Instruction: E 1000
-Instruction: E 1001
-Instruction: E 1000
-Instruction: E 1000
-Instruction: A 1006
-Instruction: R 1007
-Instruction: A 1008
-Instruction: R 1009
-Processed module 0 -- base address 0, size 10
-Defined symbol: X21=10 (Module 1, relative 0)
-Defined symbol: X22=12 (Module 1, relative 2)
-Defined symbol: X23=15 (Module 1, relative 5)
-Use list symbol: X11
-Use list symbol: X13
-Use list symbol: X31
-Instruction: E 2001
-Instruction: E 2000
-Instruction: R 2002
-Instruction: E 2000
-Instruction: E 2001
-Instruction: R 2005
-Instruction: E 2001
-Instruction: E 2002
-Processed module 1 -- base address 10, size 8
-Defined symbol: X31=20 (Module 2, relative 2)
-Instruction: A 3000
-Instruction: I 3701
-Instruction: A 3002
-Processed module 2 -- base address 18, size 3
-Use list symbol: X31
-Use list symbol: X11
-Use list symbol: X22
-Instruction: R 4000
-Instruction: E 4000
-Instruction: E 4001
-Instruction: R 4003
-Instruction: R 4004
-Instruction: E 4002
-Processed module 3 -- base address 21, size 6
-Instruction: R 5000
-Instruction: I 5887
-Instruction: R 5002
-Processed module 4 -- base address 27, size 3
-Defined symbol: X61=32 (Module 5, relative 2)
-Use list symbol: X31
-Instruction: R 6000
-Instruction: E 6000
-Instruction: A 6002
-Instruction: A 6003
-Instruction: R 6004
-Instruction: I 6005
-Processed module 5 -- base address 30, size 6
-
-Symbol Table
+SymTable:
 X11=6
 X12=8
 X13=9
@@ -67,3 +7,43 @@ X22=12
 X23=15
 X31=20
 X61=32
+
+BinaryCode:
+000: 1000
+001: 1020
+002: 1012
+003: 1020
+004: 1012
+005: 1012
+006: 1006
+007: 1007
+008: 1008
+009: 1009
+010: 2009
+011: 2006
+012: 2012
+013: 2006
+014: 2009
+015: 2015
+016: 2009
+017: 2020
+018: 3000
+019: 3701
+020: 3002
+021: 4021
+022: 4020
+023: 4006
+024: 4024
+025: 4025
+026: 4012
+027: 5027
+028: 5887
+029: 5029
+030: 6030
+031: 6020
+032: 6002
+033: 6003
+034: 6034
+035: 6005
+
+Summary: Errors=0 Warnings=0

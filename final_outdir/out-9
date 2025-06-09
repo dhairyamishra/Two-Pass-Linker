@@ -1,14 +1,12 @@
-Use list symbol: X31
-Instruction: I 2001
-Processed module 0 -- base address 0, size 1
-Defined symbol: X31=1 (Module 1, relative 0)
-Instruction: I 3001
-Processed module 1 -- base address 1, size 1
-Use list symbol: X32
-Use list symbol: X31
-Use list symbol: X32
-Instruction: E 4001
-Processed module 2 -- base address 2, size 1
-
-Symbol Table
+SymTable:
 X31=1
+
+BinaryCode:
+000: 2001
+Warning: Module 0: X31 appeared in the uselist but was not used
+001: 3001
+002: 4001
+Warning: Module 2: X32 appeared in the uselist but was not used
+Warning: Module 2: X32 appeared in the uselist but was not used
+
+Summary: Errors=0 Warnings=0

@@ -1,10 +1,11 @@
-Defined symbol: bourbon=1 (Module 0, relative 1)
-Use list symbol: whiskey
-Instruction: R 2
-Instruction: I 2
-Instruction: I 8
-Instruction: I 0
-Processed module 0 -- base address 0, size 4
-
-Symbol Table
+SymTable:
 bourbon=1
+
+BinaryCode:
+000: 0002
+001: 0002
+002: 0008
+003: 0000
+Warning: Module 0: whiskey appeared in the uselist but was not used
+
+Summary: Errors=0 Warnings=0

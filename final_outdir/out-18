@@ -1,22 +1,15 @@
-Defined symbol: a=2 (Module 0, relative 2)
-Defined symbol: b=2 (Module 0, relative 2)
-Use list symbol: x
-Use list symbol: y
-Instruction: M 1
-Instruction: E 9000
-Instruction: E 4001
-Processed module 0 -- base address 0, size 3
-Defined symbol: x=4 (Module 1, relative 1)
-Defined symbol: y=5 (Module 1, relative 2)
-Use list symbol: a
-Use list symbol: b
-Instruction: M 0
-Instruction: E 8001
-Instruction: E 4000
-Processed module 1 -- base address 3, size 3
-
-Symbol Table
+SymTable:
 a=2
 b=2
 x=4
 y=5
+
+BinaryCode:
+000: 0001
+001: 9004
+002: 4005
+003: 0000
+004: 8002
+005: 4002
+
+Summary: Errors=0 Warnings=0

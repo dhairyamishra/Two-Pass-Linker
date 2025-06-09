@@ -1,6 +1,7 @@
-Defined symbol: z=0 (Module 0, relative 0)
-Instruction: I 400
-Processed module 0 -- base address 0, size 1
-
-Symbol Table
+SymTable:
 z=0
+
+BinaryCode:
+000: 0400
+
+Summary: Errors=0 Warnings=0

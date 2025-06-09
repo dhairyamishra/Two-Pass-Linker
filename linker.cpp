@@ -13,6 +13,8 @@ int linenum = 0;
 int lineoffset = 1;    
 int usecount = 0;
 int symbolCount = 0;
+int error_count = 0;
+int warning_count = 0;
 std::map<std::string, int> symbolTable;
 
 
@@ -71,8 +73,6 @@ void firstPASS(FILE *file) {
                 printf("Warning: Module %d: %s redefinition ignored\n", module, sym);
             } else {
                 symbolTable[symbol] = abs_addr;
-                printf("Defined symbol: %s=%d (Module %d, relative %d)\n",
-                       sym, abs_addr, module, rel_addr);
             }
         }
 
@@ -81,7 +81,6 @@ void firstPASS(FILE *file) {
         for (int i = 0; i < usecount; i++) {
             char *sym = getNextToken(file);
             strcpy(useList[i], sym);
-            printf("Use list symbol: %s\n", sym);
         }
 
         // Read program text
@@ -89,21 +88,110 @@ void firstPASS(FILE *file) {
         for (int i = 0; i < codecount; i++) {
             char *addrmode = getNextToken(file);
             char *instr = getNextToken(file);
-            printf("Instruction: %c %s\n", addrmode[0], instr);
         }
 
-        printf("Processed module %d -- base address %d, size %d\n", module, base_address, codecount);
 
         base_address += codecount;
         module++;
     }
 
     // Print symbol table from the map
-    printf("\nSymbol Table\n");
+    printf("SymTable:\n");
     for (const auto &entry : symbolTable) {
         printf("%s=%d\n", entry.first.c_str(), entry.second);
     }
 }
+
+void secondPASS(FILE *file) {
+    int base_address = 0;
+    char *token;
+    int module = 0;
+    int index = 0;
+
+    printf("\nBinaryCode:\n");
+
+    while ((token = getNextToken(file)) != NULL) {
+        int defcount = atoi(token);
+        // Skip definitions
+        for (int i = 0; i < defcount; i++) {
+            getNextToken(file); // symbol
+            getNextToken(file); // relative address
+        }
+
+        // Read use list
+        int usecount = atoi(getNextToken(file));
+        char useList[16][20];
+        bool used[16] = {false};
+
+        for (int i = 0; i < usecount; i++) {
+            char *sym = getNextToken(file);
+            strcpy(useList[i], sym);
+        }
+
+        // Read program text
+        int codecount = atoi(getNextToken(file));
+        for (int i = 0; i < codecount; i++) {
+            char *addrmode = getNextToken(file);
+            char *instr_str = getNextToken(file);
+            int instr = atoi(instr_str);
+            int opcode = instr / 1000;
+            int operand = instr % 1000;
+            int resolved = instr;
+            std::string error = "";
+
+            if (opcode >= 10) {
+                resolved = 9999;
+                error = " Error: Illegal opcode; treated as 9999";
+            } else if (addrmode[0] == 'I') {
+                // Immediate: Leave as is
+            } else if (addrmode[0] == 'A') {
+                if (operand >= 512) {
+                    resolved = opcode * 1000;
+                    error = " Error: Absolute address exceeds machine size; zero used";
+                }
+            } else if (addrmode[0] == 'R') {
+                if (operand >= codecount) {
+                    resolved = opcode * 1000 + base_address;
+                    error = " Error: Relative address exceeds module size; zero used";
+                } else {
+                    resolved = opcode * 1000 + operand + base_address;
+                }
+            } else if (addrmode[0] == 'E') {
+                if (operand >= usecount) {
+                    resolved = opcode * 1000;
+                    error = " Error: External operand exceeds length of uselist; treated as relative=0";
+                } else {
+                    std::string sym(useList[operand]);
+                    used[operand] = true;
+                    if (symbolTable.count(sym)) {
+                        resolved = opcode * 1000 + symbolTable[sym];
+                        // TODO: mark symbol as used in a separate tracking map for Rule 4
+                    } else {
+                        resolved = opcode * 1000;
+                        error = " Error: " + sym + " is not defined; zero used";
+                    }
+                }
+            }
+
+            printf("%03d: %04d%s\n", index++, resolved, error.c_str());
+        }
+
+        // After processing instructions, print warnings for unused use list entries (Rule 7)
+        for (int i = 0; i < usecount; i++) {
+            if (!used[i]) {
+                printf("Warning: Module %d: %s appeared in the uselist but was not used\n",
+                       module, useList[i]);
+            }
+        }
+
+        base_address += codecount;
+        module++;
+    }
+
+    printf("\nSummary: Errors=%d Warnings=%d\n", error_count ,warning_count);
+}
+
+
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -121,5 +209,12 @@ int main(int argc, char* argv[]) {
     }
     firstPASS(file);
     fclose(file);
+    // Reopen file for pass 2
+    file = fopen(filepath, "r");
+    if (!file) {
+        printf("Error reopening file %s\n", filepath);
+        return 1;
+    }
+    secondPASS(file);
     return 0;
 }

@@ -1,13 +1,11 @@
-Use list symbol: X31
-Instruction: E 1000
-Instruction: E 1000
-Instruction: E 1000
-Processed module 0 -- base address 0, size 3
-Instruction: A 2956
-Processed module 1 -- base address 3, size 1
-Defined symbol: X21=4 (Module 2, relative 0)
-Instruction: I 3456
-Processed module 2 -- base address 4, size 1
-
-Symbol Table
+SymTable:
 X21=4
+
+BinaryCode:
+000: 1000 Error: X31 is not defined; zero used
+001: 1000 Error: X31 is not defined; zero used
+002: 1000 Error: X31 is not defined; zero used
+003: 2000 Error: Absolute address exceeds machine size; zero used
+004: 3456
+
+Summary: Errors=0 Warnings=0

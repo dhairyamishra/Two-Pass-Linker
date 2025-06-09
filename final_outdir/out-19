@@ -1,13 +1,14 @@
-Instruction: R 10002
-Instruction: I 10002
-Instruction: I 40008
-Instruction: I 0
-Instruction: R 3001
-Processed module 0 -- base address 0, size 5
-Instruction: I 9900
-Instruction: M 4000
-Instruction: M 4001
-Instruction: M 4002
-Processed module 1 -- base address 5, size 4
+SymTable:
 
-Symbol Table
+BinaryCode:
+000: 9999 Error: Illegal opcode; treated as 9999
+001: 9999 Error: Illegal opcode; treated as 9999
+002: 9999 Error: Illegal opcode; treated as 9999
+003: 0000
+004: 3001
+005: 9900
+006: 4000
+007: 4001
+008: 4002
+
+Summary: Errors=0 Warnings=0

@@ -1,7 +1,9 @@
-Use list symbol: X21
-Instruction: E 1001
-Instruction: E 1004
-Instruction: E 1222
-Processed module 0 -- base address 0, size 3
+SymTable:
 
-Symbol Table
+BinaryCode:
+000: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+001: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+002: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+Warning: Module 0: X21 appeared in the uselist but was not used
+
+Summary: Errors=0 Warnings=0
