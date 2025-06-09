@@ -107,19 +107,19 @@ void firstPASS(FILE *file) {
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        printf("Usage: %s <inputfile>\n", argv[0]);
+        printf("Usage: %s, ", argv[0]);
         return 1;
     }
 
-    const char* filename = argv[1];
-    FILE *file = fopen(filename, "r");
+    // Build full path to the input file
+    char filepath[256];
+    snprintf(filepath, sizeof(filepath), "./sample_inputs/%s", argv[1]);
+    FILE *file = fopen(filepath, "r");
     if (!file) {
-        printf("Error opening file %s\n", filename);
+        printf("Error opening file %s\n", filepath);
         return 1;
     }
-
     firstPASS(file);
-
     fclose(file);
     return 0;
 }
