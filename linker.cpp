@@ -105,14 +105,16 @@ void firstPASS(FILE *file) {
     }
 }
 
-int main() {
-    const char* filename = "input-1";
-    char filepath[256];
-    strcpy(filepath, INPUT_DIR);
-    strcat(filepath, filename);
-    FILE *file = fopen(filepath, "r");
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <inputfile>\n", argv[0]);
+        return 1;
+    }
+
+    const char* filename = argv[1];
+    FILE *file = fopen(filename, "r");
     if (!file) {
-        printf("Error opening file\n");
+        printf("Error opening file %s\n", filename);
         return 1;
     }
 
