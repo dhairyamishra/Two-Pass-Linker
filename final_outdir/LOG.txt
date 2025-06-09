@@ -1,0 +1,936 @@
+################### input-1##################
+1c1,30
+< SymTable:
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+4,23d32
+< 
+< BinaryCode:
+< 000: 1004
+< 001: 5678
+< 002: 2015
+< 003: 8002
+< 004: 7002
+< 005: 8006
+< 006: 1015
+< 007: 1015
+< 008: 3015
+< 009: 1007
+< 010: 1010
+< 011: 5012
+< 012: 4015
+< 013: 8000
+< 014: 1015
+< 015: 2002
+< 
+< Summary: Errors=0 Warnings=0
+################### input-2##################
+1c1,30
+< SymTable:
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+4,23d32
+< 
+< BinaryCode:
+< 000: 1004
+< 001: 5678
+< 002: 2015
+< 003: 8002
+< 004: 7002
+< 005: 8006
+< 006: 1015
+< 007: 1015
+< 008: 3015
+< 009: 1007
+< 010: 1010
+< 011: 5012
+< 012: 4015
+< 013: 8000
+< 014: 1015
+< 015: 2002
+< 
+< Summary: Errors=0 Warnings=0
+################### input-3##################
+1,9c1,28
+< SymTable:
+< X11=6
+< X12=8
+< X13=9
+< X21=10
+< X22=12
+< X23=15
+< X31=20
+< X61=32
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+11,54c30,32
+< BinaryCode:
+< 000: 1000
+< 001: 1020
+< 002: 1012
+< 003: 1020
+< 004: 1012
+< 005: 1012
+< 006: 1006
+< 007: 1007
+< 008: 1008
+< 009: 1009
+< 010: 2009
+< 011: 2006
+< 012: 2012
+< 013: 2006
+< 014: 2009
+< 015: 2015
+< 016: 2009
+< 017: 2020
+< 018: 3000
+< 019: 3701
+< 020: 3002
+< 021: 4021
+< 022: 4020
+< 023: 4006
+< 024: 4024
+< 025: 4025
+< 026: 4012
+< 027: 5027
+< 028: 5887
+< 029: 5029
+< 030: 6030
+< 031: 6020
+< 032: 6002
+< 033: 6003
+< 034: 6034
+< 035: 6005
+< 
+< Warning: Module 0: X12 was defined but never used
+< Warning: Module 1: X21 was defined but never used
+< Warning: Module 1: X23 was defined but never used
+< Warning: Module 5: X61 was defined but never used
+< 
+< Summary: Errors=0 Warnings=4
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-4##################
+1,3c1,28
+< Warning: Module 2: X21 redefinition ignored
+< SymTable:
+< X21=3 Error: This variable is multiple times defined; first value used
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+5,12c30,32
+< BinaryCode:
+< 000: 2003
+< 001: 2003
+< 002: 2003
+< 003: 2000 Error: Absolute address exceeds machine size; zero used
+< 004: 3465
+< 
+< Summary: Errors=2 Warnings=1
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-5##################
+1,2c1,28
+< SymTable:
+< X21=4
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+4,13c30,32
+< BinaryCode:
+< 000: 1000 Error: X31 is not defined; zero used
+< 001: 1000 Error: X31 is not defined; zero used
+< 002: 1000 Error: X31 is not defined; zero used
+< 003: 2000 Error: Absolute address exceeds machine size; zero used
+< 004: 3456
+< 
+< Warning: Module 2: X21 was defined but never used
+< 
+< Summary: Errors=4 Warnings=1
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-6##################
+1,3c1,28
+< SymTable:
+< X21=3
+< X11=4
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+5,14c30,32
+< BinaryCode:
+< 000: 1003
+< 001: 1003
+< 002: 1003
+< 003: 2000 Error: Absolute address exceeds machine size; zero used
+< 004: 3004 Error: Relative address exceeds module size; relative zero used
+< 
+< Warning: Module 2: X11 was defined but never used
+< 
+< Summary: Errors=2 Warnings=1
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-7##################
+1,3c1,28
+< SymTable:
+< X21=3
+< x31=4
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+5,14c30,32
+< BinaryCode:
+< 000: 1003
+< 001: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+< 002: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+< 003: 2000 Error: Absolute address exceeds machine size; zero used
+< 004: 3004 Error: Relative address exceeds module size; relative zero used
+< 
+< Warning: Module 2: x31 was defined but never used
+< 
+< Summary: Errors=4 Warnings=1
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-8##################
+1c1,28
+< SymTable:
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+3,9c30,32
+< BinaryCode:
+< 000: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+< 001: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+< 002: 1000 Error: External operand exceeds length of uselist; treated as relative=0
+< Warning: Module 0: uselist[0]=X21 was not used
+< 
+< Summary: Errors=3 Warnings=1
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-9##################
+1,2c1,28
+< SymTable:
+< X31=1
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+4,12c30,32
+< BinaryCode:
+< 000: 2001
+< Warning: Module 0: uselist[0]=X31 was not used
+< 001: 3001
+< 002: 4001
+< Warning: Module 2: uselist[0]=X32 was not used
+< Warning: Module 2: uselist[2]=X32 was not used
+< 
+< Summary: Errors=0 Warnings=3
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-10##################
+1,5c1,28
+< Warning: Module 0: zombie=6 valid=[0..2] assume zero relative
+< Warning: Module 1: xy=8 valid=[0..4] assume zero relative
+< SymTable:
+< zombie=0
+< xy=3
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+7,19c30,32
+< BinaryCode:
+< 000: 1000
+< 001: 2000
+< 002: 3000
+< 003: 1007
+< 004: 5678
+< 005: 2000 Error: z is not defined; zero used
+< 006: 8005
+< 007: 7003
+< 
+< Warning: Module 0: zombie was defined but never used
+< 
+< Summary: Errors=1 Warnings=3
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-11##################
+1c1,32
+< Parse Error line 3 offset 5: SYM_EXPECTED
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-12##################
+1c1,32
+< Parse Error line 3 offset 8: MARIE_EXPECTED
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-13##################
+1c1,32
+< Parse Error line 1 offset 2: SYM_EXPECTED
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-14##################
+1c1,32
+< Parse Error line 1 offset 5: NUM_EXPECTED
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-15##################
+1c1,32
+< Parse Error line 1 offset 1: TOO_MANY_DEF_IN_MODULE
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-16##################
+1c1,32
+< Parse Error line 2 offset 1: TOO_MANY_USE_IN_MODULE
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-17##################
+1c1,32
+< Parse Error line 7 offset 1: TOO_MANY_INSTR
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+> 
+> Symbol Table
+> xy=2
+> z=15
+################### input-18##################
+1,5c1,28
+< SymTable:
+< a=2
+< b=2
+< x=4
+< y=5
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+7,15c30,32
+< BinaryCode:
+< 000: 0003
+< 001: 9004
+< 002: 4005
+< 003: 0000
+< 004: 8002
+< 005: 4002
+< 
+< Summary: Errors=0 Warnings=0
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-19##################
+1c1,28
+< SymTable:
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+3,14c30,32
+< BinaryCode:
+< 000: 9999 Error: Illegal opcode; treated as 9999
+< 001: 9999 Error: Illegal opcode; treated as 9999
+< 002: 9999 Error: Illegal opcode; treated as 9999
+< 003: 0000
+< 004: 3001
+< 005: 9999 Error: Illegal immediate operand; treated as 999
+< 006: 4000
+< 007: 4005
+< 008: 4000 Error: Illegal module operand ; treated as module=0
+< 
+< Summary: Errors=5 Warnings=0
+---
+> Symbol Table
+> xy=2
+> z=15
+################### input-20##################
+1,2c1,28
+< SymTable:
+< bourbon=1
+---
+> Defined symbol: xy=2 (Module 0, relative 2)
+> Use list symbol: z
+> Use list symbol: xy
+> Instruction: R 1004
+> Instruction: I 5678
+> Instruction: E 2000
+> Instruction: R 8002
+> Instruction: E 7001
+> Processed module 0 -- base address 0, size 5
+> Use list symbol: z
+> Instruction: R 8001
+> Instruction: E 1000
+> Instruction: E 1000
+> Instruction: E 3000
+> Instruction: R 1002
+> Instruction: A 1010
+> Processed module 1 -- base address 5, size 6
+> Use list symbol: z
+> Instruction: R 5001
+> Instruction: E 4000
+> Processed module 2 -- base address 11, size 2
+> Defined symbol: z=15 (Module 3, relative 2)
+> Use list symbol: xy
+> Use list symbol: z
+> Instruction: A 8000
+> Instruction: E 1001
+> Instruction: E 2000
+> Processed module 3 -- base address 13, size 3
+4,13c30,32
+< BinaryCode:
+< 000: 0002
+< 001: 0002
+< 002: 0008
+< 003: 0000
+< Warning: Module 0: uselist[0]=whiskey was not used
+< 
+< Warning: Module 0: bourbon was defined but never used
+< 
+< Summary: Errors=0 Warnings=2
+---
+> Symbol Table
+> xy=2
+> z=15

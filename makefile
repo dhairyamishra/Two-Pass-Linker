@@ -1,18 +1,17 @@
-# Name of the executable
-TARGET = linker
+all:
+	g++ -Wall -Wextra -O2 -o linker linker.cpp
 
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -Wall -Wextra -O2
+test:
+	mkdir -p outdir
+	chmod +x runit.sh
+	./runit.sh outdir ./linker
 
-# Source file
-SRCS = linker.cpp
+grade:
+	chmod +x gradeit.sh
+	./gradeit.sh ./sample_outputs outdir
 
-# Build target
-all: $(TARGET)
-
-$(TARGET): $(SRCS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS)
+runall: all test grade
 
 clean:
-	rm -f $(TARGET)
+	rm -f linker
+	rm -rf outdir
