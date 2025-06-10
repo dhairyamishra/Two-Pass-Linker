@@ -4,4 +4,6 @@ z=0
 BinaryCode:
 000: 0400
 
-Summary: Errors=0 Warnings=0
+Warning: Module 0: z was defined but never used
+
+Summary: Errors=0 Warnings=1

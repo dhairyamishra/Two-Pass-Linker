@@ -46,4 +46,9 @@ BinaryCode:
 034: 6034
 035: 6005
 
-Summary: Errors=0 Warnings=0
+Warning: Module 0: X12 was defined but never used
+Warning: Module 1: X21 was defined but never used
+Warning: Module 1: X23 was defined but never used
+Warning: Module 5: X61 was defined but never used
+
+Summary: Errors=0 Warnings=4

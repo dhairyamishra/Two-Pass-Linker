@@ -7,105 +7,33 @@
 < 011: 5012
 ---
 > 011: 5001
-################### input-3##################
-49,54c49
-< Warning: Module 0: X12 was defined but never used
-< Warning: Module 1: X21 was defined but never used
-< Warning: Module 1: X23 was defined but never used
-< Warning: Module 5: X61 was defined but never used
-< 
-< Summary: Errors=0 Warnings=4
----
-> Summary: Errors=0 Warnings=0
-################### input-4##################
-3c3
-< X21=3 Error: This variable is multiple times defined; first value used
----
-> X21=3
-12c12
-< Summary: Errors=2 Warnings=1
----
-> Summary: Errors=1 Warnings=1
-################### input-5##################
-11,13c11
-< Warning: Module 2: X21 was defined but never used
-< 
-< Summary: Errors=4 Warnings=1
----
-> Summary: Errors=4 Warnings=0
 ################### input-6##################
 2d1
 < X21=3
 3a3
 > X21=3
-10,12c10
-< 004: 3004 Error: Relative address exceeds module size; relative zero used
-< 
-< Warning: Module 2: X11 was defined but never used
----
-> 004: 3004 Error: Relative address exceeds module size; zero used
-14c12
-< Summary: Errors=2 Warnings=1
----
-> Summary: Errors=2 Warnings=0
-################### input-7##################
-10c10
-< 004: 3004 Error: Relative address exceeds module size; relative zero used
----
-> 004: 3004 Error: Relative address exceeds module size; zero used
-12,14c12
-< Warning: Module 2: x31 was defined but never used
-< 
-< Summary: Errors=4 Warnings=1
----
-> Summary: Errors=4 Warnings=0
-################### input-8##################
-7c7
-< Warning: Module 0: uselist[0]=X21 was not used
----
-> Warning: Module 0: X21 appeared in the uselist but was not used
-################### input-9##################
-6c6
-< Warning: Module 0: uselist[0]=X31 was not used
----
-> Warning: Module 0: X31 appeared in the uselist but was not used
-9,10c9,10
-< Warning: Module 2: uselist[0]=X32 was not used
-< Warning: Module 2: uselist[2]=X32 was not used
----
-> Warning: Module 2: X32 appeared in the uselist but was not used
-> Warning: Module 2: X32 appeared in the uselist but was not used
 ################### input-10##################
-1,2d0
-< Warning: Module 0: zombie=6 valid=[0..2] assume zero relative
-< Warning: Module 1: xy=8 valid=[0..4] assume zero relative
-4,5c2,3
+4d3
 < zombie=0
-< xy=3
----
-> xy=11
-> zombie=6
-15c13
-< 007: 7003
----
-> 007: 7011
-17,19c15
-< Warning: Module 0: zombie was defined but never used
-< 
-< Summary: Errors=1 Warnings=3
----
-> Summary: Errors=1 Warnings=0
+5a5
+> zombie=0
 ################### input-11##################
-1d0
+1c1
 < Parse Error line 3 offset 5: SYM_EXPECTED
+---
+> Parse Error line 3 offset 5: NUM_EXPECTED
 ################### input-12##################
-1d0
+1c1
 < Parse Error line 3 offset 8: MARIE_EXPECTED
+---
+> Parse Error line 3 offset 5: ADDR_EXPECTED
 ################### input-13##################
-1d0
+1c1
 < Parse Error line 1 offset 2: SYM_EXPECTED
+---
+> Parse Error line 1 offset 1: SYM_EXPECTED
 ################### input-14##################
-1c1,7
+1c1,9
 < Parse Error line 1 offset 5: NUM_EXPECTED
 ---
 > SymTable:
@@ -114,13 +42,19 @@
 > BinaryCode:
 > 000: 0400
 > 
-> Summary: Errors=0 Warnings=0
+> Warning: Module 0: z was defined but never used
+> 
+> Summary: Errors=0 Warnings=1
 ################### input-16##################
-1d0
+1c1
 < Parse Error line 2 offset 1: TOO_MANY_USE_IN_MODULE
+---
+> Parse Error line 2 offset 8: SYM_EXPECTED
 ################### input-17##################
-1d0
+1c1
 < Parse Error line 7 offset 1: TOO_MANY_INSTR
+---
+> Parse Error line 7 offset 5: NUM_EXPECTED
 ################### input-18##################
 8c8
 < 000: 0003
@@ -137,18 +71,8 @@
 ---
 > 007: 4001
 > 008: 4002
-14c14
+14c14,15
 < Summary: Errors=5 Warnings=0
 ---
+> 
 > Summary: Errors=3 Warnings=0
-################### input-20##################
-9c9
-< Warning: Module 0: uselist[0]=whiskey was not used
----
-> Warning: Module 0: whiskey appeared in the uselist but was not used
-11,13c11
-< Warning: Module 0: bourbon was defined but never used
-< 
-< Summary: Errors=0 Warnings=2
----
-> Summary: Errors=0 Warnings=1

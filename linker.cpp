@@ -12,13 +12,15 @@ char useList[16][20];
 int linenum = 0;       
 int lineoffset = 1;    
 int usecount = 0;
-int symbolCount = 0;
 int error_count = 0;
 int warning_count = 0;
+
 std::map<std::string, int> symbolTable;
+std::map<std::string, bool> symbolUsed;
+std::map<std::string, int> symbolModule; 
+std::map<std::string, bool> symbolMultiplyDefined;
 
-
-//using strtok() get pointer to char array for token
+// Tokenizer
 char* getNextToken(FILE *file) {
     static char line[256];
     static char *token = NULL;
@@ -28,23 +30,27 @@ char* getNextToken(FILE *file) {
             if (fgets(line, sizeof(line), file) == NULL) {
                 return NULL;
             }
-            // add new line for proper line tracking, was wrong first
             linenum++;            
             currentLine = line;   
             token = strtok(currentLine, " \t\n");
-            // reset line offset when token is null
             lineoffset = 1;
-        } 
-        else {
+        } else {
             token = strtok(NULL, " \t\n");
         }
         if (token != NULL) {
-            //need to add plus 1 since offest was adjusted before
             lineoffset = (token - currentLine) + 1;
             return token; 
         }
-        // If not, the line was empty
     }
+}
+
+char* checkedGetNextToken(FILE *file, const char* expected) {
+    char* token = getNextToken(file);
+    if (token == NULL) {
+        printf("Parse Error line %d offset %d: %s\n", linenum, lineoffset, expected);
+        exit(1);
+    }
+    return token;
 }
 
 void firstPASS(FILE *file) {
@@ -54,55 +60,74 @@ void firstPASS(FILE *file) {
 
     while ((token = getNextToken(file)) != NULL) {
         int defcount = atoi(token);
-        if (defcount < 0) {
-            printf("Error: Negative definition count in module %d\n", module);
-            error_count++;
-            return;
-        }
         if (defcount > 16) {
             printf("Parse Error line %d offset %d: TOO_MANY_DEF_IN_MODULE\n", linenum, lineoffset);
-            error_count++;
             exit(1);
         }
-        // Read definitions
+
+        struct {
+            std::string name;
+            int rel_addr;
+        } module_def[16];
+
         for (int i = 0; i < defcount; i++) {
-            char *sym = getNextToken(file);
-            int rel_addr = atoi(getNextToken(file));
-            int abs_addr = base_address + rel_addr;
-
-            std::string symbol(sym);
-
-            if (symbolTable.find(symbol) != symbolTable.end()) {
-                printf("Warning: Module %d: %s redefinition ignored\n", module, sym);
-                warning_count++;
-            } else {
-                symbolTable[symbol] = abs_addr;
-            }
+            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
+            int rel_addr = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
+            module_def[i].name = sym;
+            module_def[i].rel_addr = rel_addr;
         }
 
-        // Read use list
-        usecount = atoi(getNextToken(file));
+        usecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
         for (int i = 0; i < usecount; i++) {
-            char *sym = getNextToken(file);
+            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
             strcpy(useList[i], sym);
         }
 
-        // Read program text
-        int codecount = atoi(getNextToken(file));
+        int codecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
         for (int i = 0; i < codecount; i++) {
-            getNextToken(file); // skip addrmode
-            getNextToken(file); // skip instr
-            //skipping these values since first pass does not need to store them
-            
+            checkedGetNextToken(file, "ADDR_EXPECTED");
+            checkedGetNextToken(file, "NUM_EXPECTED");
         }
+
+        for (int i = 0; i < defcount; i++) {
+            int rel_addr = module_def[i].rel_addr;
+            std::string sym = module_def[i].name;
+            int abs_addr = base_address + rel_addr;
+
+            if (rel_addr >= codecount) {
+                if(codecount - 1 <= 0) {
+                    printf("Warning: Module %d: %s redefinition ignored\n",
+                       module, sym.c_str());
+                }
+                else{
+                    printf("Warning: Module %d: %s=%d valid=[0..%d] assume zero relative\n",
+                       module, sym.c_str(), rel_addr, codecount - 1);
+                }
+                abs_addr = base_address;
+                warning_count++;
+            }
+
+            if (symbolTable.find(sym) != symbolTable.end()) {
+                symbolMultiplyDefined[sym] = true;
+            } else {
+                symbolTable[sym] = abs_addr;
+                symbolUsed[sym] = false;
+                symbolModule[sym] = module;
+            }
+        }
+
         base_address += codecount;
         module++;
     }
 
-    // Print symbol table from the map
     printf("SymTable:\n");
     for (const auto &entry : symbolTable) {
-        printf("%s=%d\n", entry.first.c_str(), entry.second);
+        printf("%s=%d", entry.first.c_str(), entry.second);
+        if (symbolMultiplyDefined[entry.first]) {
+            printf(" Error: This variable is multiple times defined; first value used");
+            error_count++;
+        }
+        printf("\n");
     }
 }
 
@@ -116,27 +141,24 @@ void secondPASS(FILE *file) {
 
     while ((token = getNextToken(file)) != NULL) {
         int defcount = atoi(token);
-        // Skip definitions
         for (int i = 0; i < defcount; i++) {
-            getNextToken(file); // symbol
-            getNextToken(file); // relative address
+            checkedGetNextToken(file, "SYM_EXPECTED");
+            checkedGetNextToken(file, "NUM_EXPECTED");
         }
 
-        // Read use list
-        int usecount = atoi(getNextToken(file));
+        int usecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
         char useList[16][20];
         bool used[16] = {false};
 
         for (int i = 0; i < usecount; i++) {
-            char *sym = getNextToken(file);
+            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
             strcpy(useList[i], sym);
         }
 
-        // Read program text
-        int codecount = atoi(getNextToken(file));
+        int codecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
         for (int i = 0; i < codecount; i++) {
-            char *addrmode = getNextToken(file);
-            char *instr_str = getNextToken(file);
+            char *addrmode = checkedGetNextToken(file, "ADDR_EXPECTED");
+            char *instr_str = checkedGetNextToken(file, "NUM_EXPECTED");
             int instr = atoi(instr_str);
             int opcode = instr / 1000;
             int operand = instr % 1000;
@@ -147,22 +169,19 @@ void secondPASS(FILE *file) {
                 resolved = 9999;
                 error = " Error: Illegal opcode; treated as 9999";
                 error_count++;
-
             } else if (addrmode[0] == 'I') {
-                // Immediate: Leave as is
+                // Immediate: leave as is
             } else if (addrmode[0] == 'A') {
                 if (operand >= 512) {
                     resolved = opcode * 1000;
                     error = " Error: Absolute address exceeds machine size; zero used";
                     error_count++;
-
                 }
             } else if (addrmode[0] == 'R') {
                 if (operand >= codecount) {
                     resolved = opcode * 1000 + base_address;
-                    error = " Error: Relative address exceeds module size; zero used";
+                    error = " Error: Relative address exceeds module size; relative zero used";
                     error_count++;
-
                 } else {
                     resolved = opcode * 1000 + operand + base_address;
                 }
@@ -171,18 +190,16 @@ void secondPASS(FILE *file) {
                     resolved = opcode * 1000;
                     error = " Error: External operand exceeds length of uselist; treated as relative=0";
                     error_count++;
-
                 } else {
                     std::string sym(useList[operand]);
                     used[operand] = true;
                     if (symbolTable.count(sym)) {
                         resolved = opcode * 1000 + symbolTable[sym];
-                        // TODO: mark symbol as used in a separate tracking map for Rule 4
+                        symbolUsed[sym] = true; 
                     } else {
                         resolved = opcode * 1000;
                         error = " Error: " + sym + " is not defined; zero used";
                         error_count++;
-
                     }
                 }
             }
@@ -190,10 +207,9 @@ void secondPASS(FILE *file) {
             printf("%03d: %04d%s\n", index++, resolved, error.c_str());
         }
 
-        // After processing instructions, print warnings for unused use list entries (Rule 7)
         for (int i = 0; i < usecount; i++) {
             if (!used[i]) {
-                printf("Warning: Module %d: %s appeared in the uselist but was not used\n", module, useList[i]);
+                printf("Warning: Module %d: uselist[%d]=%s was not used\n", module, i, useList[i]);
                 warning_count++;
             }
         }
@@ -202,18 +218,24 @@ void secondPASS(FILE *file) {
         module++;
     }
 
+    printf("\n");
+    for (const auto &entry : symbolUsed) {
+        if (!entry.second) {
+            printf("Warning: Module %d: %s was defined but never used\n",
+                   symbolModule[entry.first], entry.first.c_str());
+            warning_count++;
+        }
+    }
+
     printf("\nSummary: Errors=%d Warnings=%d\n", error_count ,warning_count);
 }
 
-
-
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        printf("Usage: %s, ", argv[0]);
+        printf("Usage: %s <inputfile>\n", argv[0]);
         return 1;
     }
 
-    // Build full path to the input file
     char filepath[256];
     snprintf(filepath, sizeof(filepath), "./sample_inputs/%s", argv[1]);
     FILE *file = fopen(filepath, "r");
@@ -223,12 +245,14 @@ int main(int argc, char* argv[]) {
     }
     firstPASS(file);
     fclose(file);
-    // Reopen file for pass 2
+
     file = fopen(filepath, "r");
     if (!file) {
         printf("Error reopening file %s\n", filepath);
         return 1;
     }
     secondPASS(file);
+    fclose(file);
+
     return 0;
 }

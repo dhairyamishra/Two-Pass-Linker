@@ -1,6 +1,6 @@
 Warning: Module 2: X21 redefinition ignored
 SymTable:
-X21=3
+X21=3 Error: This variable is multiple times defined; first value used
 
 BinaryCode:
 000: 2003
@@ -9,4 +9,5 @@ BinaryCode:
 003: 2000 Error: Absolute address exceeds machine size; zero used
 004: 3465
 
-Summary: Errors=1 Warnings=1
+
+Summary: Errors=2 Warnings=1

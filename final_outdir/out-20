@@ -6,6 +6,8 @@ BinaryCode:
 001: 0002
 002: 0008
 003: 0000
-Warning: Module 0: whiskey appeared in the uselist but was not used
+Warning: Module 0: uselist[0]=whiskey was not used
 
-Summary: Errors=0 Warnings=1
+Warning: Module 0: bourbon was defined but never used
+
+Summary: Errors=0 Warnings=2

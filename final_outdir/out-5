@@ -8,4 +8,6 @@ BinaryCode:
 003: 2000 Error: Absolute address exceeds machine size; zero used
 004: 3456
 
-Summary: Errors=4 Warnings=0
+Warning: Module 2: X21 was defined but never used
+
+Summary: Errors=4 Warnings=1
