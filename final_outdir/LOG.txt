@@ -25,14 +25,14 @@
 12c12
 < Summary: Errors=2 Warnings=1
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=1 Warnings=1
 ################### input-5##################
 11,13c11
 < Warning: Module 2: X21 was defined but never used
 < 
 < Summary: Errors=4 Warnings=1
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=4 Warnings=0
 ################### input-6##################
 2d1
 < X21=3
@@ -47,7 +47,7 @@
 14c12
 < Summary: Errors=2 Warnings=1
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=2 Warnings=0
 ################### input-7##################
 10c10
 < 004: 3004 Error: Relative address exceeds module size; relative zero used
@@ -58,16 +58,12 @@
 < 
 < Summary: Errors=4 Warnings=1
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=4 Warnings=0
 ################### input-8##################
 7c7
 < Warning: Module 0: uselist[0]=X21 was not used
 ---
 > Warning: Module 0: X21 appeared in the uselist but was not used
-9c9
-< Summary: Errors=3 Warnings=1
----
-> Summary: Errors=0 Warnings=0
 ################### input-9##################
 6c6
 < Warning: Module 0: uselist[0]=X31 was not used
@@ -79,10 +75,6 @@
 ---
 > Warning: Module 2: X32 appeared in the uselist but was not used
 > Warning: Module 2: X32 appeared in the uselist but was not used
-12c12
-< Summary: Errors=0 Warnings=3
----
-> Summary: Errors=0 Warnings=0
 ################### input-10##################
 1,2d0
 < Warning: Module 0: zombie=6 valid=[0..2] assume zero relative
@@ -102,7 +94,7 @@
 < 
 < Summary: Errors=1 Warnings=3
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=1 Warnings=0
 ################### input-11##################
 1d0
 < Parse Error line 3 offset 5: SYM_EXPECTED
@@ -148,7 +140,7 @@
 14c14
 < Summary: Errors=5 Warnings=0
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=3 Warnings=0
 ################### input-20##################
 9c9
 < Warning: Module 0: uselist[0]=whiskey was not used
@@ -159,4 +151,4 @@
 < 
 < Summary: Errors=0 Warnings=2
 ---
-> Summary: Errors=0 Warnings=0
+> Summary: Errors=0 Warnings=1

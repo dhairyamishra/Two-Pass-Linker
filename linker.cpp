@@ -31,10 +31,11 @@ char* getNextToken(FILE *file) {
             // add new line for proper line tracking, was wrong first
             linenum++;            
             currentLine = line;   
-            token = strtok(line, " \t\n");
+            token = strtok(currentLine, " \t\n");
             // reset line offset when token is null
             lineoffset = 1;
-        } else {
+        } 
+        else {
             token = strtok(NULL, " \t\n");
         }
         if (token != NULL) {
@@ -55,10 +56,12 @@ void firstPASS(FILE *file) {
         int defcount = atoi(token);
         if (defcount < 0) {
             printf("Error: Negative definition count in module %d\n", module);
+            error_count++;
             return;
         }
         if (defcount > 16) {
             printf("Parse Error line %d offset %d: TOO_MANY_DEF_IN_MODULE\n", linenum, lineoffset);
+            error_count++;
             exit(1);
         }
         // Read definitions
@@ -71,6 +74,7 @@ void firstPASS(FILE *file) {
 
             if (symbolTable.find(symbol) != symbolTable.end()) {
                 printf("Warning: Module %d: %s redefinition ignored\n", module, sym);
+                warning_count++;
             } else {
                 symbolTable[symbol] = abs_addr;
             }
@@ -86,11 +90,11 @@ void firstPASS(FILE *file) {
         // Read program text
         int codecount = atoi(getNextToken(file));
         for (int i = 0; i < codecount; i++) {
-            char *addrmode = getNextToken(file);
-            char *instr = getNextToken(file);
+            getNextToken(file); // skip addrmode
+            getNextToken(file); // skip instr
+            //skipping these values since first pass does not need to store them
+            
         }
-
-
         base_address += codecount;
         module++;
     }
@@ -142,17 +146,23 @@ void secondPASS(FILE *file) {
             if (opcode >= 10) {
                 resolved = 9999;
                 error = " Error: Illegal opcode; treated as 9999";
+                error_count++;
+
             } else if (addrmode[0] == 'I') {
                 // Immediate: Leave as is
             } else if (addrmode[0] == 'A') {
                 if (operand >= 512) {
                     resolved = opcode * 1000;
                     error = " Error: Absolute address exceeds machine size; zero used";
+                    error_count++;
+
                 }
             } else if (addrmode[0] == 'R') {
                 if (operand >= codecount) {
                     resolved = opcode * 1000 + base_address;
                     error = " Error: Relative address exceeds module size; zero used";
+                    error_count++;
+
                 } else {
                     resolved = opcode * 1000 + operand + base_address;
                 }
@@ -160,6 +170,8 @@ void secondPASS(FILE *file) {
                 if (operand >= usecount) {
                     resolved = opcode * 1000;
                     error = " Error: External operand exceeds length of uselist; treated as relative=0";
+                    error_count++;
+
                 } else {
                     std::string sym(useList[operand]);
                     used[operand] = true;
@@ -169,6 +181,8 @@ void secondPASS(FILE *file) {
                     } else {
                         resolved = opcode * 1000;
                         error = " Error: " + sym + " is not defined; zero used";
+                        error_count++;
+
                     }
                 }
             }
@@ -179,8 +193,8 @@ void secondPASS(FILE *file) {
         // After processing instructions, print warnings for unused use list entries (Rule 7)
         for (int i = 0; i < usecount; i++) {
             if (!used[i]) {
-                printf("Warning: Module %d: %s appeared in the uselist but was not used\n",
-                       module, useList[i]);
+                printf("Warning: Module %d: %s appeared in the uselist but was not used\n", module, useList[i]);
+                warning_count++;
             }
         }
 

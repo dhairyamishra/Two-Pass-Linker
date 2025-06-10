@@ -9,4 +9,4 @@ BinaryCode:
 003: 2000 Error: Absolute address exceeds machine size; zero used
 004: 3004 Error: Relative address exceeds module size; zero used
 
-Summary: Errors=0 Warnings=0
+Summary: Errors=4 Warnings=0
