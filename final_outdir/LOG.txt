@@ -8,11 +8,6 @@
 < Parse Error line 1 offset 2: SYM_EXPECTED
 ---
 > Parse Error line 1 offset 1: SYM_EXPECTED
-################### input-17##################
-1c1
-< Parse Error line 7 offset 1: TOO_MANY_INSTR
----
-> Parse Error line 7 offset 5: ADDR_EXPECTED
 ################### input-18##################
 8c8
 < 000: 0003

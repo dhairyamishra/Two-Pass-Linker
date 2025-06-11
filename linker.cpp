@@ -40,7 +40,7 @@ char* getNextToken(FILE *file) {
 void __parseerror(int errcode) {
     static const char* errstr[] = {
         "NUM_EXPECTED", "SYM_EXPECTED", "ADDR_EXPECTED", "SYM_TOO_LONG",
-        "TOO_MANY_DEF_IN_MODULE", "TOO_MANY_USE_IN_MODULE"
+        "TOO_MANY_DEF_IN_MODULE", "TOO_MANY_USE_IN_MODULE", "TOO_MANY_INSTR"
     };
     printf("Parse Error line %d offset %d: %s\n", linenum, lineoffset, errstr[errcode]);
     exit(1);
@@ -73,7 +73,7 @@ char readMARIE(FILE *file) {
 }
 
 void firstPASS(FILE *file) {
-    int baseAddr = 0, module = 0;
+    int baseAddr = 0, module = 0, totalInstructions = 0;
     while (true) {
         char *tok = getNextToken(file);
         if (!tok) break; // EOF
@@ -92,6 +92,11 @@ void firstPASS(FILE *file) {
         for (int i=0; i<usecount; i++) readSymbol(file);
 
         int codecount = readInt(file);
+        totalInstructions += codecount;
+        if (totalInstructions > MACHINE_SIZE) {
+            __parseerror(6); // 6 is the index for TOO_MANY_INSTR
+        }
+
         for (int i=0; i<codecount; i++) {
             readMARIE(file);
             readInt(file);
