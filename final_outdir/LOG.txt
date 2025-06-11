@@ -1,0 +1,23 @@
+################### input-12##################
+1c1
+< Parse Error line 3 offset 8: MARIE_EXPECTED
+---
+> Parse Error line 3 offset 5: ADDR_EXPECTED
+################### input-13##################
+1c1
+< Parse Error line 1 offset 2: SYM_EXPECTED
+---
+> Parse Error line 1 offset 1: SYM_EXPECTED
+################### input-19##################
+9c9
+< 005: 9999 Error: Illegal immediate operand; treated as 999
+---
+> 005: 9900
+12c12
+< 008: 4000 Error: Illegal module operand ; treated as module=0
+---
+> 008: 4009
+14c14
+< Summary: Errors=5 Warnings=0
+---
+> Summary: Errors=3 Warnings=0

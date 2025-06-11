@@ -18,5 +18,3 @@ runall: all test grade logs
 
 clean:
 	rm -f linker
-	rm -rf final_outdir
-	rm -f make.log gradeit.log lab1_submit.zip

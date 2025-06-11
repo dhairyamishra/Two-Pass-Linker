@@ -1,0 +1,12 @@
+SymTable:
+X31=1
+
+BinaryCode:
+000: 2001
+Warning: Module 0: uselist[0]=X31 was not used
+001: 3001
+002: 4001
+Warning: Module 2: uselist[0]=X32 was not used
+Warning: Module 2: uselist[2]=X32 was not used
+
+Summary: Errors=0 Warnings=3

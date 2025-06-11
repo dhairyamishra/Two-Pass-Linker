@@ -1,0 +1,14 @@
+SymTable:
+
+BinaryCode:
+000: 9999 Error: Illegal opcode; treated as 9999
+001: 9999 Error: Illegal opcode; treated as 9999
+002: 9999 Error: Illegal opcode; treated as 9999
+003: 0000
+004: 3001
+005: 9900
+006: 4000
+007: 4005
+008: 4009
+
+Summary: Errors=3 Warnings=0

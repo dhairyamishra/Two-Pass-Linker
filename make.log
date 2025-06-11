@@ -1,0 +1,7 @@
+Bahubali
+make[1]: Entering directory '/mnt/c/Users/dhair/Desktop/Operating Systems/Lab 1 - Linker and Parser/CSCI-GA.2250-001-Operating-Systems-Summer-2025'
+rm -f linker
+make[1]: Leaving directory '/mnt/c/Users/dhair/Desktop/Operating Systems/Lab 1 - Linker and Parser/CSCI-GA.2250-001-Operating-Systems-Summer-2025'
+make[1]: Entering directory '/mnt/c/Users/dhair/Desktop/Operating Systems/Lab 1 - Linker and Parser/CSCI-GA.2250-001-Operating-Systems-Summer-2025'
+g++ -Wall -Wextra -O2 -o linker linker.cpp
+make[1]: Leaving directory '/mnt/c/Users/dhair/Desktop/Operating Systems/Lab 1 - Linker and Parser/CSCI-GA.2250-001-Operating-Systems-Summer-2025'
