@@ -15,3 +15,10 @@ runall: all test grade
 clean:
 	rm -f linker
 	rm -rf final_outdir
+
+logs:
+	(hostname; make clean; make 2>&1) > make.log
+	./gradeit.sh . final_outdir > gradeit.log
+
+submit: logs
+	zip lab1_submit.zip linker.cpp makefile make.log gradeit.log
