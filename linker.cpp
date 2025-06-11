@@ -1,129 +1,135 @@
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <map>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
+#include <map>
+#include <string>
+#include <cctype>
+#include <vector>
 
-const char* INPUT_DIR = "./sample_inputs/";
-const char* OUTPUT_DIR = "./sample_outputs/";
-char useList[16][20];  
-int linenum = 0;       
-int lineoffset = 1;    
-int usecount = 0;
-int error_count = 0;
-int warning_count = 0;
+int linenum = 0, lineoffset = 1;
+int error_count = 0, warning_count = 0;
+const int MACHINE_SIZE = 512;
 
 std::map<std::string, int> symbolTable;
 std::map<std::string, bool> symbolUsed;
-std::map<std::string, int> symbolModule; 
+std::map<std::string, int> symbolModule;
 std::map<std::string, bool> symbolMultiplyDefined;
+std::vector<std::string> symbolOrder;
 
-// Tokenizer
 char* getNextToken(FILE *file) {
     static char line[256];
-    static char *token = NULL;
-    static char *currentLine = NULL;
+    static char *token = nullptr, *currentLine = nullptr;
     while (true) {
-        if (token == NULL) {
-            if (fgets(line, sizeof(line), file) == NULL) {
-                return NULL;
-            }
-            linenum++;            
-            currentLine = line;   
+        if (token == nullptr) {
+            if (fgets(line, sizeof(line), file) == nullptr) return nullptr;
+            linenum++;
+            currentLine = line;
             token = strtok(currentLine, " \t\n");
             lineoffset = 1;
         } else {
-            token = strtok(NULL, " \t\n");
+            token = strtok(nullptr, " \t\n");
         }
-        if (token != NULL) {
+        if (token != nullptr) {
             lineoffset = (token - currentLine) + 1;
-            return token; 
+            return token;
         }
     }
 }
 
-char* checkedGetNextToken(FILE *file, const char* expected) {
-    char* token = getNextToken(file);
-    if (token == NULL) {
-        printf("Parse Error line %d offset %d: %s\n", linenum, lineoffset, expected);
-        exit(1);
-    }
-    return token;
+void __parseerror(int errcode) {
+    static const char* errstr[] = {
+        "NUM_EXPECTED", "SYM_EXPECTED", "ADDR_EXPECTED", "SYM_TOO_LONG",
+        "TOO_MANY_DEF_IN_MODULE", "TOO_MANY_USE_IN_MODULE"
+    };
+    printf("Parse Error line %d offset %d: %s\n", linenum, lineoffset, errstr[errcode]);
+    exit(1);
+}
+
+
+int readInt(FILE *file) {
+    char *tok = getNextToken(file);
+    if (!tok) __parseerror(0);
+    for (int i=0; tok[i]; i++)
+        if (!isdigit(tok[i])) __parseerror(0);
+    return atoi(tok);
+}
+
+std::string readSymbol(FILE *file) {
+    char *tok = getNextToken(file);
+    if (!tok) __parseerror(1);
+    if (!isalpha(tok[0])) __parseerror(1);
+    for (int i=1; tok[i]; i++)
+        if (!isalnum(tok[i])) __parseerror(1);
+    if (strlen(tok) > 16) __parseerror(3);
+    return std::string(tok);
+}
+
+char readMARIE(FILE *file) {
+    char *tok = getNextToken(file);
+    if (!tok) __parseerror(2);
+    if (strchr("MARIE", tok[0]) == nullptr) __parseerror(2);
+    return tok[0];
 }
 
 void firstPASS(FILE *file) {
-    int base_address = 0;
-    char *token;
-    int module = 0;
+    int baseAddr = 0, module = 0;
+    while (true) {
+        char *tok = getNextToken(file);
+        if (!tok) break; // EOF
+        int defcount = atoi(tok);
+        if (defcount > 16) __parseerror(4);
 
-    while ((token = getNextToken(file)) != NULL) {
-        int defcount = atoi(token);
-        if (defcount > 16) {
-            printf("Parse Error line %d offset %d: TOO_MANY_DEF_IN_MODULE\n", linenum, lineoffset);
-            exit(1);
+        std::map<std::string, int> moduleDefs;
+        for (int i=0; i<defcount; i++) {
+            std::string sym = readSymbol(file);
+            int relAddr = readInt(file);
+            moduleDefs[sym] = relAddr;
         }
 
-        struct {
-            std::string name;
-            int rel_addr;
-        } module_def[16];
+        int usecount = readInt(file);
+        if (usecount > 16) __parseerror(5);
+        for (int i=0; i<usecount; i++) readSymbol(file);
 
-        for (int i = 0; i < defcount; i++) {
-            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
-            int rel_addr = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
-            module_def[i].name = sym;
-            module_def[i].rel_addr = rel_addr;
+        int codecount = readInt(file);
+        for (int i=0; i<codecount; i++) {
+            readMARIE(file);
+            readInt(file);
         }
 
-        usecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
-        for (int i = 0; i < usecount; i++) {
-            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
-            strcpy(useList[i], sym);
-        }
+        for (auto &p : moduleDefs) {
+            std::string sym = p.first;
+            int relAddr = p.second;
+            int absAddr = baseAddr + relAddr;
 
-        int codecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
-        for (int i = 0; i < codecount; i++) {
-            checkedGetNextToken(file, "ADDR_EXPECTED");
-            checkedGetNextToken(file, "NUM_EXPECTED");
-        }
-
-        for (int i = 0; i < defcount; i++) {
-            int rel_addr = module_def[i].rel_addr;
-            std::string sym = module_def[i].name;
-            int abs_addr = base_address + rel_addr;
-
-            if (rel_addr >= codecount) {
-                if(codecount - 1 <= 0) {
-                    printf("Warning: Module %d: %s redefinition ignored\n",
-                       module, sym.c_str());
+            if (relAddr >= codecount) {
+                if(codecount-1 <= 0){
+                    printf("Warning: Module %d: %s redefinition ignored\n", module, sym.c_str());
                 }
                 else{
-                    printf("Warning: Module %d: %s=%d valid=[0..%d] assume zero relative\n",
-                       module, sym.c_str(), rel_addr, codecount - 1);
+                    printf("Warning: Module %d: %s=%d valid=[0..%d] assume zero relative\n", module, sym.c_str(), relAddr, codecount-1);
                 }
-                abs_addr = base_address;
+                
+                absAddr = baseAddr;
                 warning_count++;
             }
-
-            if (symbolTable.find(sym) != symbolTable.end()) {
+            if (symbolTable.count(sym)) {
                 symbolMultiplyDefined[sym] = true;
             } else {
-                symbolTable[sym] = abs_addr;
+                symbolTable[sym] = absAddr;
                 symbolUsed[sym] = false;
                 symbolModule[sym] = module;
+                symbolOrder.push_back(sym);
             }
         }
-
-        base_address += codecount;
+        baseAddr += codecount;
         module++;
     }
 
     printf("SymTable:\n");
-    for (const auto &entry : symbolTable) {
-        printf("%s=%d", entry.first.c_str(), entry.second);
-        if (symbolMultiplyDefined[entry.first]) {
+    for (auto &p : symbolOrder) {
+        printf("%s=%d", p.c_str(), symbolTable[p]);
+        if (symbolMultiplyDefined[p]) {
             printf(" Error: This variable is multiple times defined; first value used");
             error_count++;
         }
@@ -132,60 +138,53 @@ void firstPASS(FILE *file) {
 }
 
 void secondPASS(FILE *file) {
-    int base_address = 0;
-    char *token;
-    int module = 0;
-    int index = 0;
-
+    int baseAddr = 0, module = 0, index = 0;
     printf("\nBinaryCode:\n");
-
-    while ((token = getNextToken(file)) != NULL) {
-        int defcount = atoi(token);
-        for (int i = 0; i < defcount; i++) {
-            checkedGetNextToken(file, "SYM_EXPECTED");
-            checkedGetNextToken(file, "NUM_EXPECTED");
-        }
-
-        int usecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
+    while (true) {
+        char *tok = getNextToken(file);
+        if (!tok) break;
+        int defcount = atoi(tok);
+        for (int i=0; i<defcount; i++) { readSymbol(file); readInt(file); }
+        int usecount = readInt(file);
         char useList[16][20];
         bool used[16] = {false};
-
-        for (int i = 0; i < usecount; i++) {
-            char *sym = checkedGetNextToken(file, "SYM_EXPECTED");
-            strcpy(useList[i], sym);
+        for (int i=0; i<usecount; i++) {
+            std::string sym = readSymbol(file);
+            strcpy(useList[i], sym.c_str());
         }
-
-        int codecount = atoi(checkedGetNextToken(file, "NUM_EXPECTED"));
-        for (int i = 0; i < codecount; i++) {
-            char *addrmode = checkedGetNextToken(file, "ADDR_EXPECTED");
-            char *instr_str = checkedGetNextToken(file, "NUM_EXPECTED");
-            int instr = atoi(instr_str);
-            int opcode = instr / 1000;
-            int operand = instr % 1000;
+        int codecount = readInt(file);
+        for (int i=0; i<codecount; i++) {
+            char mode = readMARIE(file);
+            int instr = readInt(file);
+            int opcode = instr / 1000, operand = instr % 1000;
             int resolved = instr;
-            std::string error = "";
+            std::string error;
 
-            if (opcode >= 10) {
+            if (instr >= 10000) { // too big
                 resolved = 9999;
                 error = " Error: Illegal opcode; treated as 9999";
                 error_count++;
-            } else if (addrmode[0] == 'I') {
-                // Immediate: leave as is
-            } else if (addrmode[0] == 'A') {
-                if (operand >= 512) {
+            } else if (mode == 'I') {
+                if (instr >= 10000) {
+                    resolved = 9999;
+                    error = " Error: Illegal immediate operand; treated as 999";
+                    error_count++;
+                }
+            } else if (mode == 'A') {
+                if (operand >= MACHINE_SIZE) {
                     resolved = opcode * 1000;
                     error = " Error: Absolute address exceeds machine size; zero used";
                     error_count++;
                 }
-            } else if (addrmode[0] == 'R') {
+            } else if (mode == 'R') {
                 if (operand >= codecount) {
-                    resolved = opcode * 1000 + base_address;
+                    resolved = opcode * 1000 + baseAddr;
                     error = " Error: Relative address exceeds module size; relative zero used";
                     error_count++;
                 } else {
-                    resolved = opcode * 1000 + operand + base_address;
+                    resolved = opcode * 1000 + operand + baseAddr;
                 }
-            } else if (addrmode[0] == 'E') {
+            } else if (mode == 'E') {
                 if (operand >= usecount) {
                     resolved = opcode * 1000;
                     error = " Error: External operand exceeds length of uselist; treated as relative=0";
@@ -195,7 +194,7 @@ void secondPASS(FILE *file) {
                     used[operand] = true;
                     if (symbolTable.count(sym)) {
                         resolved = opcode * 1000 + symbolTable[sym];
-                        symbolUsed[sym] = true; 
+                        symbolUsed[sym] = true;
                     } else {
                         resolved = opcode * 1000;
                         error = " Error: " + sym + " is not defined; zero used";
@@ -203,31 +202,23 @@ void secondPASS(FILE *file) {
                     }
                 }
             }
-
             printf("%03d: %04d%s\n", index++, resolved, error.c_str());
         }
-
-        for (int i = 0; i < usecount; i++) {
+        for (int i=0; i<usecount; i++)
             if (!used[i]) {
                 printf("Warning: Module %d: uselist[%d]=%s was not used\n", module, i, useList[i]);
                 warning_count++;
             }
-        }
-
-        base_address += codecount;
+        baseAddr += codecount;
         module++;
     }
-
-    printf("\n");
-    for (const auto &entry : symbolUsed) {
-        if (!entry.second) {
+    for (auto &p : symbolUsed)
+        if (!p.second) {
             printf("Warning: Module %d: %s was defined but never used\n",
-                   symbolModule[entry.first], entry.first.c_str());
+                   symbolModule[p.first], p.first.c_str());
             warning_count++;
         }
-    }
-
-    printf("\nSummary: Errors=%d Warnings=%d\n", error_count ,warning_count);
+    printf("\nSummary: Errors=%d Warnings=%d\n", error_count, warning_count);
 }
 
 int main(int argc, char* argv[]) {
@@ -235,22 +226,13 @@ int main(int argc, char* argv[]) {
         printf("Usage: %s <inputfile>\n", argv[0]);
         return 1;
     }
-
-    char filepath[256];
-    snprintf(filepath, sizeof(filepath), "./sample_inputs/%s", argv[1]);
-    FILE *file = fopen(filepath, "r");
-    if (!file) {
-        printf("Error opening file %s\n", filepath);
-        return 1;
-    }
+    FILE *file = fopen(argv[1], "r");
+    if (!file) { printf("Error opening file\n"); return 1; }
     firstPASS(file);
     fclose(file);
 
-    file = fopen(filepath, "r");
-    if (!file) {
-        printf("Error reopening file %s\n", filepath);
-        return 1;
-    }
+    file = fopen(argv[1], "r");
+    if (!file) { printf("Error reopening file\n"); return 1; }
     secondPASS(file);
     fclose(file);
 

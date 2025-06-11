@@ -1,9 +1,1 @@
-SymTable:
-z=0
-
-BinaryCode:
-000: 0400
-
-Warning: Module 0: z was defined but never used
-
-Summary: Errors=0 Warnings=1
+Parse Error line 1 offset 5: NUM_EXPECTED

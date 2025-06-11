@@ -8,7 +8,7 @@ test:
 
 grade:
 	chmod +x gradeit.sh
-	./gradeit.sh ./sample_outputs final_outdir
+	./gradeit.sh . final_outdir
 
 runall: all test grade
 

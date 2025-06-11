@@ -1,8 +1,8 @@
 Warning: Module 0: zombie=6 valid=[0..2] assume zero relative
 Warning: Module 1: xy=8 valid=[0..4] assume zero relative
 SymTable:
-xy=3
 zombie=0
+xy=3
 
 BinaryCode:
 000: 1000
@@ -13,7 +13,6 @@ BinaryCode:
 005: 2000 Error: z is not defined; zero used
 006: 8005
 007: 7003
-
 Warning: Module 0: zombie was defined but never used
 
 Summary: Errors=1 Warnings=3

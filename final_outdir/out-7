@@ -8,7 +8,6 @@ BinaryCode:
 002: 1000 Error: External operand exceeds length of uselist; treated as relative=0
 003: 2000 Error: Absolute address exceeds machine size; zero used
 004: 3004 Error: Relative address exceeds module size; relative zero used
-
 Warning: Module 2: x31 was defined but never used
 
 Summary: Errors=4 Warnings=1

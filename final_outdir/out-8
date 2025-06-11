@@ -6,5 +6,4 @@ BinaryCode:
 002: 1000 Error: External operand exceeds length of uselist; treated as relative=0
 Warning: Module 0: uselist[0]=X21 was not used
 
-
 Summary: Errors=3 Warnings=1
