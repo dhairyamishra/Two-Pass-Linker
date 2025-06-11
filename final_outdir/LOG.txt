@@ -8,22 +8,15 @@
 < Parse Error line 1 offset 2: SYM_EXPECTED
 ---
 > Parse Error line 1 offset 1: SYM_EXPECTED
-################### input-18##################
-8c8
-< 000: 0003
----
-> 000: 0001
 ################### input-19##################
 9c9
 < 005: 9999 Error: Illegal immediate operand; treated as 999
 ---
 > 005: 9900
-11,12c11,12
-< 007: 4005
+12c12
 < 008: 4000 Error: Illegal module operand ; treated as module=0
 ---
-> 007: 4001
-> 008: 4002
+> 008: 4009
 14c14
 < Summary: Errors=5 Warnings=0
 ---

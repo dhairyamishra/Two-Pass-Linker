@@ -16,6 +16,7 @@ std::map<std::string, bool> symbolUsed;
 std::map<std::string, int> symbolModule;
 std::map<std::string, bool> symbolMultiplyDefined;
 std::vector<std::string> symbolOrder;
+std::vector<int> moduleBase; // For M mode
 
 char* getNextToken(FILE *file) {
     static char line[256];
@@ -46,7 +47,6 @@ void __parseerror(int errcode) {
     exit(1);
 }
 
-
 int readInt(FILE *file) {
     char *tok = getNextToken(file);
     if (!tok) __parseerror(0);
@@ -75,6 +75,7 @@ char readMARIE(FILE *file) {
 void firstPASS(FILE *file) {
     int baseAddr = 0, module = 0, totalInstructions = 0;
     while (true) {
+        moduleBase.push_back(baseAddr); // Track module base
         char *tok = getNextToken(file);
         if (!tok) break; // EOF
         int defcount = atoi(tok);
@@ -94,7 +95,7 @@ void firstPASS(FILE *file) {
         int codecount = readInt(file);
         totalInstructions += codecount;
         if (totalInstructions > MACHINE_SIZE) {
-            __parseerror(6); // 6 is the index for TOO_MANY_INSTR
+            __parseerror(6); // TOO_MANY_INSTR
         }
 
         for (int i=0; i<codecount; i++) {
@@ -114,7 +115,6 @@ void firstPASS(FILE *file) {
                 else{
                     printf("Warning: Module %d: %s=%d valid=[0..%d] assume zero relative\n", module, sym.c_str(), relAddr, codecount-1);
                 }
-                
                 absAddr = baseAddr;
                 warning_count++;
             }
@@ -150,6 +150,7 @@ void secondPASS(FILE *file) {
         if (!tok) break;
         int defcount = atoi(tok);
         for (int i=0; i<defcount; i++) { readSymbol(file); readInt(file); }
+
         int usecount = readInt(file);
         char useList[16][20];
         bool used[16] = {false};
@@ -157,6 +158,7 @@ void secondPASS(FILE *file) {
             std::string sym = readSymbol(file);
             strcpy(useList[i], sym.c_str());
         }
+
         int codecount = readInt(file);
         for (int i=0; i<codecount; i++) {
             char mode = readMARIE(file);
@@ -165,15 +167,17 @@ void secondPASS(FILE *file) {
             int resolved = instr;
             std::string error;
 
-            if (instr >= 10000) { // too big
+            if (opcode >= 10) {
                 resolved = 9999;
                 error = " Error: Illegal opcode; treated as 9999";
                 error_count++;
-            } else if (mode == 'I') {
-                if (instr >= 10000) {
-                    resolved = 9999;
-                    error = " Error: Illegal immediate operand; treated as 999";
+            } else if (mode == 'M') {
+                if (operand < 0 || static_cast<size_t>(operand) >= moduleBase.size()) {
+                    resolved = opcode * 1000;
+                    error = " Error: Illegal module operand ; treated as module=0";
                     error_count++;
+                } else {
+                    resolved = opcode * 1000 + moduleBase[operand];
                 }
             } else if (mode == 'A') {
                 if (operand >= MACHINE_SIZE) {
@@ -188,6 +192,12 @@ void secondPASS(FILE *file) {
                     error_count++;
                 } else {
                     resolved = opcode * 1000 + operand + baseAddr;
+                }
+            } else if (mode == 'I') {
+                if (operand >= 1000) {
+                    resolved = 9999;
+                    error = " Error: Illegal immediate operand; treated as 999";
+                    error_count++;
                 }
             } else if (mode == 'E') {
                 if (operand >= usecount) {
@@ -206,7 +216,7 @@ void secondPASS(FILE *file) {
                         error_count++;
                     }
                 }
-            }
+            } 
             printf("%03d: %04d%s\n", index++, resolved, error.c_str());
         }
         for (int i=0; i<usecount; i++)
